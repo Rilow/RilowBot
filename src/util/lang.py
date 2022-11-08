@@ -43,16 +43,17 @@ def _parse(s: str) -> Dict[str, str]:
     data = {}
 
     for line in lines:
-        if line.startswith("//"): continue
+        if line.strip().startswith("//"): continue
         if "=" not in line: continue
 
         split = line.split("=")
 
+        key = split[0]
+        
+
         if len(split) > 2:
-            key = split[0]
             val = "=".join(split[1:])
         else:
-            key = split[0]
             val = split[1]
         
         key = key.strip().replace(" ", "_")
@@ -75,7 +76,7 @@ class Lang:
     def __init__(self, lang: str=None, *, load: bool=True):
         self._data = {}
         
-        self.setLang(lang)
+        self.setLang(lang, load=load)
     
     def setLang(self, lang: str, *, load: bool=True) -> None:
         """
@@ -125,7 +126,7 @@ class Lang:
         # Return back the key by default
         return self._data.get(key, key)
     
-    def translateKeyFormat(self, key: str, *args, **kwargs) -> str:
+    def translateKeyFormat(self, key: str, *args) -> str:
         """
         Translates a key using the current language and formats it
         if the translation is found. Returns the translated key + format.
@@ -136,7 +137,12 @@ class Lang:
         if s == key:
             return key
         
-        return s.format(*args, **kwargs)
+        # Try to format the string. If there
+        # is an error return the unformated string.
+        try:
+            s = s % args
+        except:
+            return s
 
 
 if __name__ == "__main__":
@@ -152,3 +158,5 @@ if __name__ == "__main__":
 """)
 
     print(d)
+
+    print("test" % (22, "test"))
