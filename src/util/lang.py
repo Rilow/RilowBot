@@ -3,7 +3,7 @@ RilowBot
 -----------------------------
 File: lang.py
 Date: 2022-11-07
-Updated: 2022-11-07
+Updated: 2022-11-08
 
 Allows for language translations, instead of hard coding strings
 instead use a string identifier (signified by #) with the 
