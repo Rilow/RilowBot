@@ -40,6 +40,8 @@ def _parse(s: str) -> Dict[str, str]:
     """
     lines = s.strip().splitlines()
 
+    data = {}
+
     for line in lines:
         if line.startswith("//"): continue
         if "=" not in line: continue
@@ -54,9 +56,22 @@ def _parse(s: str) -> Dict[str, str]:
             val = split[1]
         
         key = key.strip().replace(" ", "_")
-        return
+        val = val.strip()
+        data[key] = val
+    
+    return data
 
 class Lang:
+    @classmethod
+    def fromData(cls, data: Dict[str, str]) -> "Lang":
+        """
+        Create a lang object from data.
+        """
+        # Use data as the lang code.
+        l = cls("data", load=False)
+        l._data = data
+        return l
+
     def __init__(self, lang: str=None, *, load: bool=True):
         self._data = {}
         
@@ -128,7 +143,6 @@ if __name__ == "__main__":
     rlog.init_logging(create_log_dir=False, create_log_file=False)
 
     l = Lang()
-    print(l.lang)
 
     d = _parse("""
 //comment
