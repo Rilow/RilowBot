@@ -56,6 +56,13 @@ class Config:
         
         self._data = data
 
+    def _save(self) -> None:
+        """
+        Internal method to save the config file to disk.
+        """
+        with open(self.filepath, "w+") as f:
+            json.dump(self._data, f, indent=4, sort_keys=True)
+
     def __getattr__(self, attr):
         return self._data[attr]
 

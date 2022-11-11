@@ -13,6 +13,7 @@ import logging
 import os
 import platform
 import sys
+import traceback
 
 LOG_DIR = os.path.join(os.getcwd(), "logs")
 CURRENT_LOG = os.path.join(LOG_DIR, "current.log")
@@ -128,6 +129,12 @@ def init_logging() -> None:
         level=logging.DEBUG,
         handlers=[fileHandler, streamHandler],
     )
+
+def format_exception(exc: Exception) -> str:
+    """
+    Formats an exceptions traceback for output.
+    """
+    return "\n".join(traceback.format_exception(exc))
 
 if __name__ == "__main__":
     init_logging()
