@@ -10,6 +10,7 @@ Helper module which allows for easy config management using json.
 import json
 import logging
 import os
+from typing import Any, Optional
 
 class AttrDict(dict):
     def __getattr__(self, attr):
@@ -21,7 +22,7 @@ class AttrDict(dict):
     def __delattr__(self, attr):
         return self.__delitem__(attr)
 
-CONFIG_RESERVED_ATTRIBUTES = {"filepath", "_data", "_savecount"}
+CONFIG_RESERVED_ATTRIBUTES = {"filepath", "_data", "_savecount", "_logger"}
 SAVEABLE_CONFIG_MAX_SAVECOUNT = 1
 
 class Config:
@@ -48,7 +49,7 @@ class Config:
         Internal method that loads the config data from disk.
         """
         if not os.path.exists(self.filepath):
-            return self._logger.warn("File '{self.filepath}' does not exist", source=self._load)
+            return self._logger.warn(f"File '{self.filepath}' does not exist")
         
         with open(self.filepath) as f:
             data = json.load(f)
@@ -72,6 +73,13 @@ class Config:
     
     def __delitem__(self, item):
         del self._data[item]
+
+    def get(self, key: str, default: Optional[Any]=None) -> Any:
+        """
+        Attempts to get the key from the config,
+        if it doesn't exist returns default instead.
+        """
+        return self._data.get(key, default)
 
 if __name__ == "__main__":
     data = {

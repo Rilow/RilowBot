@@ -98,7 +98,7 @@ class Lang:
         """
         def _check_path(p):
             if not os.path.exists(p):
-                self._logger.warn(f"Path '{p}' does not exist.", source=_check_path)
+                self._logger.warn(f"Path '{p}' does not exist.")
                 return False
             return True
 
