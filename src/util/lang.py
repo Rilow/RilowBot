@@ -12,10 +12,9 @@ currently active language.
 """
 import ctypes
 import locale
+import logging
 import os
 from typing import Dict
-
-import rlog
 
 def _get_default_lang() -> str:
     """
@@ -74,6 +73,8 @@ class Lang:
         return l
 
     def __init__(self, lang: str=None, *, load: bool=True):
+        self._logger = logging.getLogger(__name__)
+        
         self._data = {}
         
         self.setLang(lang, load=load)
@@ -97,7 +98,7 @@ class Lang:
         """
         def _check_path(p):
             if not os.path.exists(p):
-                rlog.warn(f"Path '{p}' does not exist.", source=_check_path)
+                self._logger.warn(f"Path '{p}' does not exist.", source=_check_path)
                 return False
             return True
 
@@ -146,8 +147,6 @@ class Lang:
 
 
 if __name__ == "__main__":
-    rlog.init_logging(create_log_dir=False, create_log_file=False)
-
     l = Lang()
 
     d = _parse("""

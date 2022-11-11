@@ -134,3 +134,5 @@ secrets.py
 
 # Instance specific files
 vacation.db
+
+logs/

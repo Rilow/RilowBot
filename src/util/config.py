@@ -8,9 +8,8 @@ Updated: 2022-11-08
 Helper module which allows for easy config management using json.
 """
 import json
+import logging
 import os
-
-import rlog
 
 class AttrDict(dict):
     def __getattr__(self, attr):
@@ -33,6 +32,7 @@ class Config:
         return c
 
     def __init__(self, filepath: str, *, load: bool=True):
+        self._logger = logging.getLogger(__name__)
         self._data = {}
 
         self.filepath = filepath
@@ -48,7 +48,7 @@ class Config:
         Internal method that loads the config data from disk.
         """
         if not os.path.exists(self.filepath):
-            return rlog.warn("File '{self.filepath}' does not exist", source=self._load)
+            return self._logger.warn("File '{self.filepath}' does not exist", source=self._load)
         
         with open(self.filepath) as f:
             data = json.load(f)
@@ -74,8 +74,6 @@ class Config:
         del self._data[item]
 
 if __name__ == "__main__":
-    rlog.init_logging(create_log_dir=False, create_log_file=False)
-
     data = {
         "hello": "world",
         "test": True,
